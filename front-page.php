@@ -15,9 +15,23 @@
       <div class="full-width-split__inner">
         <h2 class="headline headline--small-plus t-center">Upcoming Events</h2>
         <?php
+          ////////// ORDERING BY A CUSTOM FIELD //////////
+          $today = date('Ymd'); // Has to be same format as custom field stores the date as
           $homepageEvents = new WP_Query(array(
-            'posts_per_page' => 2,
+            'posts_per_page' => -1,   // -1 returns everything that meets your query ALL AT ONCE
             'post_type'      => 'event',
+            'meta_key'       => 'event_date',
+            'orderby'        => 'meta_value_num',
+            'order'          => 'ASC',
+            'meta_query'     => array(
+              array(
+                // Only return posts if the event date is greater than or equal to todays date
+                'key' => 'event_date',
+                'compare' => '>=',
+                'value' => $today,
+                'type' => 'numeric' // Because we are comparing numbers
+              )
+            )
           ));
           while($homepageEvents->have_posts()) {
             $homepageEvents->the_post();
