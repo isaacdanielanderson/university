@@ -18,7 +18,7 @@
           ////////// ORDERING BY A CUSTOM FIELD //////////
           $today = date('Ymd'); // Has to be same format as custom field stores the date as
           $homepageEvents = new WP_Query(array(
-            'posts_per_page' => -1,   // -1 returns everything that meets your query ALL AT ONCE
+            'posts_per_page' => 2,   // -1 returns everything that meets your query ALL AT ONCE
             'post_type'      => 'event',
             'meta_key'       => 'event_date',
             'orderby'        => 'meta_value_num',
