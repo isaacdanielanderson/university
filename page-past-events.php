@@ -35,7 +35,6 @@ pageBanner(array(
       )); // Pagination
       ?>
 </div>
-
 <?php
 get_footer();
  ?>
