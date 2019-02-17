@@ -1,10 +1,11 @@
 <?php
-get_header();
-// While loop
-while(have_posts()) {
-  the_post(); 
-  pageBanner();
-  ?>
+  
+  get_header();
+
+  while(have_posts()) {
+    the_post();
+    pageBanner();
+     ?>
 
     <div class="container container--narrow page-section">
           <div class="metabox metabox--position-up metabox--with-home-link">
@@ -13,43 +14,40 @@ while(have_posts()) {
 
       <div class="generic-content"><?php the_content(); ?></div>
 
-
-      <?php
-      $relatedProfessors = new WP_Query(array(
-        'posts_per_page' => -1,
-        'post_type' => 'professor',
-        'orderby' => 'title',
-        'order' => 'ASC',
-        'meta_query' => array(
-          array(
-            'key' => 'related_programs',
-            'compare' => 'LIKE',
-            'value' => '"' . get_the_ID() . '"'
+      <?php 
+        $relatedProfessors = new WP_Query(array(
+          'posts_per_page' => -1,
+          'post_type' => 'professor',
+          'orderby' => 'title',
+          'order' => 'ASC',
+          'meta_query' => array(
+            array(
+              'key' => 'related_programs',
+              'compare' => 'LIKE',
+              'value' => '"' . get_the_ID() . '"'
+            )
           )
-        )
-      ));
-      if ($relatedProfessors->have_posts()) {
-        echo '<hr class="section-break">';
-        echo '<h2 class="headline headline--medium">' . get_the_title() . ' professors</h2>';
-      }
-      echo '<ul class="professor-cards">';
-      while($relatedProfessors->have_posts()) {
-        $relatedProfessors->the_post(); ?>
-        <li class="professor-card__list-item">
-          <a class="professor-card" href="<?php the_permalink(); ?>">
-            <img class="professor-card__image" src="<?php the_post_thumbnail_url('professorLandscape'); ?>">
-            <span class="professor-card__name"><?php the_title(); ?></span>
-          </a>
-        </li>
-      <?php }
+        ));
+
+        if ($relatedProfessors->have_posts()) {
+          echo '<hr class="section-break">';
+        echo '<h2 class="headline headline--medium">' . get_the_title() . ' Professors</h2>';
+
+        echo '<ul class="professor-cards">';
+        while($relatedProfessors->have_posts()) {
+          $relatedProfessors->the_post(); ?>
+          <li class="professor-card__list-item">
+            <a class="professor-card" href="<?php the_permalink(); ?>">
+              <img class="professor-card__image" src="<?php the_post_thumbnail_url('professorLandscape') ?>">
+              <span class="professor-card__name"><?php the_title(); ?></span>
+            </a>
+          </li>
+        <?php }
         echo '</ul>';
-       ?>
+        }
 
-      <?php
-      wp_reset_postdata(); // The first while loop hijacks the global post object so we need to run this function to get a new ID; Whenever you wanna run multiple custom queries on the same page 99/100 times need to run this function
-      ?>
+        wp_reset_postdata();
 
-      <?php
         $today = date('Ymd');
         $homepageEvents = new WP_Query(array(
           'posts_per_page' => 2,
@@ -71,16 +69,25 @@ while(have_posts()) {
             )
           )
         ));
+
         if ($homepageEvents->have_posts()) {
           echo '<hr class="section-break">';
-          echo '<h2 class="headline headline--medium">Upcoming ' . get_the_title() . ' events</h2>';
-        }
+        echo '<h2 class="headline headline--medium">Upcoming ' . get_the_title() . ' Events</h2>';
+
         while($homepageEvents->have_posts()) {
-          $homepageEvents->the_post(); 
+          $homepageEvents->the_post();
           get_template_part('template-parts/content-event');
-        } ?>
+        }
+        }
+
+      ?>
+
     </div>
+    
 
-<?php } ?>
+    
+  <?php }
 
-<?php get_footer(); ?>
+  get_footer();
+
+?>
